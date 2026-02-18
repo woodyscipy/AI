@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Engineer Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #05070f;
+    --surface: #0d1120;
+    --border: #1e2540;
+    --accent1: #00f0ff;
+    --accent2: #7b5fff;
+    --accent3: #ff4f8b;
+    --accent4: #00e5a0;
+    --accent5: #ffb347;
+    --text: #e8eaf6;
+    --muted: #6b7599;
+    --glow1: rgba(0,240,255,0.15);
+    --glow2: rgba(123,95,255,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,240,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,240,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 48px 32px 80px;
+  }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+    margin-bottom: 64px;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  .header-badge {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent1);
+    border: 1px solid var(--accent1);
+    padding: 6px 18px;
+    border-radius: 2px;
+    margin-bottom: 24px;
+    box-shadow: 0 0 20px var(--glow1);
+  }
+
+  .header h1 {
+    font-size: clamp(40px, 6vw, 80px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -2px;
+    background: linear-gradient(135deg, #fff 0%, var(--accent1) 50%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+  }
+
+  .header p {
+    color: var(--muted);
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+  }
+
+  /* TIMELINE LEGEND */
+  .legend {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 64px;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  /* PHASE SECTIONS */
+  .phases {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .phase {
+    display: grid;
+    grid-template-columns: 220px 60px 1fr;
+    gap: 0;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .phase:nth-child(1) { animation-delay: 0.1s; }
+  .phase:nth-child(2) { animation-delay: 0.2s; }
+  .phase:nth-child(3) { animation-delay: 0.3s; }
+  .phase:nth-child(4) { animation-delay: 0.4s; }
+  .phase:nth-child(5) { animation-delay: 0.5s; }
+  .phase:nth-child(6) { animation-delay: 0.6s; }
+
+  /* Phase label */
+  .phase-label {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-start;
+    padding: 28px 24px 0 0;
+    text-align: right;
+  }
+
+  .phase-month {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    opacity: 0.6;
+  }
+
+  .phase-title {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    line-height: 1.3;
+    text-align: right;
+  }
+
+  /* Timeline spine */
+  .phase-spine {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
+  .spine-node {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid;
+    background: var(--bg);
+    margin-top: 30px;
+    position: relative;
+    z-index: 2;
+    flex-shrink: 0;
+    box-shadow: 0 0 16px currentColor;
+  }
+
+  .spine-line {
+    width: 2px;
+    flex: 1;
+    min-height: 20px;
+    background: linear-gradient(to bottom, currentColor, transparent);
+    opacity: 0.3;
+  }
+
+  .phase:last-child .spine-line { display: none; }
+
+  /* Content area */
+  .phase-content {
+    padding: 20px 0 48px 24px;
+  }
+
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .phase-icon {
+    font-size: 22px;
+    line-height: 1;
+  }
+
+  .phase-name {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+
+  /* Skill cards grid */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .skill-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    cursor: default;
+  }
+
+  .skill-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+
+  .skill-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--card-accent);
+    opacity: 0.8;
+  }
+
+  .skill-card-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+    color: var(--card-accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .skill-card-title::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--card-accent);
+    flex-shrink: 0;
+    box-shadow: 0 0 8px var(--card-accent);
+  }
+
+  .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--muted);
+    letter-spacing: 0.5px;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .skill-card:hover .tag {
+    background: rgba(255,255,255,0.08);
+    color: var(--text);
+  }
+
+  .tag.hot {
+    background: rgba(255,79,139,0.1);
+    border-color: rgba(255,79,139,0.3);
+    color: var(--accent3);
+  }
+
+  .tag.key {
+    background: rgba(0,240,255,0.08);
+    border-color: rgba(0,240,255,0.25);
+    color: var(--accent1);
+  }
+
+  /* Project ideas */
+  .project-ideas {
+    margin-top: 16px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .project-header {
+    background: rgba(123,95,255,0.08);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 16px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent2);
+  }
+
+  .project-list {
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .project-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .project-item::before {
+    content: '→';
+    color: var(--accent2);
+    flex-shrink: 0;
+    font-family: 'Space Mono', monospace;
+    margin-top: 1px;
+  }
+
+  /* Resources row */
+  .resources {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .resource-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0,229,160,0.07);
+    border: 1px solid rgba(0,229,160,0.2);
+    border-radius: 6px;
+    padding: 5px 12px;
+    font-size: 12px;
+    color: var(--accent4);
+    font-weight: 600;
+  }
+
+  .resource-chip span {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* CAREER OUTCOMES */
+  .outcomes {
+    margin-top: 64px;
+    animation: fadeUp 0.8s 0.7s ease both;
+  }
+
+  .section-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent1);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--border), transparent);
+  }
+
+  .outcome-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  .outcome-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.2s;
+  }
+
+  .outcome-card:hover { transform: translateY(-3px); }
+
+  .outcome-emoji { font-size: 28px; margin-bottom: 10px; }
+
+  .outcome-role {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+
+  .outcome-salary {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent4);
+  }
+
+  /* SALARY TRACKER */
+  .salary-track {
+    margin-top: 32px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+  }
+
+  .salary-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  .salary-row {
+    display: grid;
+    grid-template-columns: 120px 1fr 100px;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .salary-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-align: right;
+  }
+
+  .salary-bar-track {
+    background: rgba(255,255,255,0.05);
+    border-radius: 4px;
+    height: 10px;
+    overflow: hidden;
+  }
+
+  .salary-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1s ease;
+  }
+
+  .salary-amount {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text);
+    text-align: right;
+  }
+
+  /* Phase color overrides */
+  .p1 { --phase-color: #00f0ff; }
+  .p2 { --phase-color: #7b5fff; }
+  .p3 { --phase-color: #ff4f8b; }
+  .p4 { --phase-color: #00e5a0; }
+  .p5 { --phase-color: #ffb347; }
+  .p6 { --phase-color: #c084fc; }
+
+  /* ANIMATIONS */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .phase {
+      grid-template-columns: 0 40px 1fr;
+    }
+    .phase-label { display: none; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .salary-row { grid-template-columns: 80px 1fr 80px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-badge">Complete Career Roadmap</div>
+    <h1>AI Engineer</h1>
+    <p>From beginner to production-ready AI Engineer · 12-month structured path</p>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#00f0ff;box-shadow:0 0 8px #00f0ff"></div>Phase 1 — Foundation</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#7b5fff;box-shadow:0 0 8px #7b5fff"></div>Phase 2 — ML Core</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#ff4f8b;box-shadow:0 0 8px #ff4f8b"></div>Phase 3 — AI Engineering</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#00e5a0;box-shadow:0 0 8px #00e5a0"></div>Phase 4 — Advanced Stack</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#ffb347;box-shadow:0 0 8px #ffb347"></div>Phase 5 — Portfolio</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#c084fc;box-shadow:0 0 8px #c084fc"></div>Phase 6 — Job Hunt</div>
+  </div>
+
+  <!-- PHASES -->
+  <div class="phases">
+
+    <!-- PHASE 1 -->
+    <div class="phase p1">
+      <div class="phase-label">
+        <div class="phase-month" style="color:#00f0ff">Months 1–2</div>
+        <div class="phase-title" style="color:#00f0ff">Foundation</div>
+      </div>
+      <div class="phase-spine" style="color:#00f0ff">
+        <div class="spine-node" style="border-color:#00f0ff;box-shadow:0 0 16px #00f0ff"></div>
+        <div class="spine-line" style="background:linear-gradient(to bottom, #00f0ff, transparent)"></div>
+      </div>
+      <div class="phase-content">
+        <div class="phase-header">
+          <div class="phase-icon">⚡</div>
+          <div class="phase-name" style="color:#00f0ff">Core Technical Foundation</div>
+        </div>
+        <div class="skills-grid">
+          <div class="skill-card" style="--card-accent:#00f0ff">
+            <div class="skill-card-title">Python Mastery</div>
+            <div class="skill-tags">
+              <span class="tag key">OOP</span>
+              <span class="tag">Functions</span>
+              <span class="tag">File I/O</span>
+              <span class="tag">Error Handling</span>
+              <span class="tag">Decorators</span>
+              <span class="tag">Generators</span>
+              <span class="tag">List Comprehension</span>
+              <span class="tag key">APIs / HTTP</span>
+              <span class="tag">Virtual Envs</span>
+            </div>
+          </div>
+          <div class="skill-card" style="--card-accent:#00f0ff">
+            <div class="skill-card-title">Dev Tools & Workflow</div>
+            <div class="skill-tags">
+              <span class="tag key">Git & GitHub</span>
+              <span class="tag">VS Code</span>
+              <span class="tag">Linux / Terminal</span>
+              <span class="tag">Jupyter Notebooks</span>
+              <span class="tag">pip / conda</span>
+              <span class="tag">Docker basics</span>
+              <span class="tag">SSH</span>
+            </div>
+          </div>
+          <div class="skill-card" style="--card-accent:#00f0ff">
+            <div class="skill-card-title">Math Essentials</div>
+            <div class="skill-tags">
+              <span class="tag">Linear Algebra</span>
+              <span class="tag">Matrices & Vectors</span>
+              <span class="tag">Probability</span>
+              <span class="tag">Statistics</span>
+              <span class="tag">Calculus basics</span>
+              <span class="tag">Gradient Descent (concept)</span>
+            </div>
+          </div>
+          <div class="skill-card" style="--card-accent:#00f0ff">
+            <div class="skill-card-title">Data Libraries</div>
+            <div class="skill-tags">
+              <span class="tag key">NumPy</span>
+              <span class="tag key">Pandas</span>
+              <span class="tag">Matplotlib</span>
+              <span class="tag">Seaborn</span>
+              <span class="tag">Plotly</span>
+              <span class="tag">Requests</span>
+            </div>
+          </div>
+        </div>
+        <div class="resources">
+          <div class="resource-chip">Python for Everybody <span>Coursera</span></div>
+          <div class="resource-chip">3Blue1Brown Linear Algebra <span>YouTube</span></div>
+          <div class="resource-chip">Real Python <span>Website</span></div>
+          <div class="resource-chip">100 Days of Code <span>Udemy</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 2 -->
+    <div class="phase p2">
+      <div class="phase-label">
+        <div class="phase-month" style="color:#7b5fff">Months 3–4</div>
+        <div class="phase-title" style="color:#7b5fff">ML Fundamentals</div>
+      </div>
+      <div class="phase-spine" style="color:#7b5fff">
+        <div class="spine-node" style="border-color:#7b5fff;box-shadow:0 0 16px #7b5fff"></div>
+        <div class="spine-line" style="background:linear-gradient(to bottom, #7b5fff, transparent)"></div>
+      </div>
+      <div class="phase-content">
+        <div class="phase-header">
+          <div class="phase-icon">🧠</div>
+          <div class="phase-name" style="color:#7b5fff">Machine Learning Core</div>
+        </div>
+        <div class="skills-grid">
+          <div class="skill-card" style="--card-accent:#7b5fff">
+            <div class="skill-card-title">Classical ML</div>
+            <div class="skill-tags">
+              <span class="tag">Supervised Learning</span>
+              <span class="tag">Linear Regression</span>
+              <span class="tag">Logistic Regression</span>
+              <span class="tag">Decision Trees</span>
+              <span class="tag">Random Forests</span>
+              <span class="tag">SVM</span>
+              <span class="tag key">scikit-learn</span>
+              <span class="tag">Cross Validation</span>
+              <span class="tag">Feature Engineering</span>
+            </div>
+          </div>
+          <div class="skill-card" style="--card-accent:#7b5fff">
+            <div class="skill-card-title">Neural Networks</div>
+            <div class="skill-tags">
+              <span class="tag key">PyTorch</span>
+              <span class="tag">TensorFlow / Keras</span>
+              <span class="tag">Feedforward NNs</span>
+              <span class="tag">Backpropagation</span>
+              <span class="tag">Activation Functions</span>
+              <span class="tag">Optimizers (Adam, SGD)</span>
+              <span class="tag">Loss Functions</span>
+              <span class="tag">Overfitting / Dropout</span>
+            </div>
+          </div>
+          <div class="skill-card" style="--card-accent:#7b5fff">
+            <div class="skill-card-title">Deep Learning Architectures</div>
+            <div class="skill-tags">
+              <span class="tag">CNNs</span>
+              <span class="tag">RNNs / LSTMs</span>
+              <span class="tag key">Transformers</span>
+              <span class="tag">Attention Mechanism</span>
+              <span class="tag">Encoder-Decoder</span>
+              <span class="tag">Transfer Learning</span>
+              <span class="tag">Fine-tuning</span>
+            </div>
+          </div>
+          <div class="skill-card" style="--card-accent:#7b5fff">
+            <div class="skill-card-title">Model Evaluation</div>
+            <div class="skill-tags">
+              <span class="tag">Accuracy / F1 / AUC</span>
+              <span class="tag">Confusion Matrix</span>
+              <span class="tag">BLEU / ROUGE</span>
+              <span class="tag">Hyperparameter Tuning</span>
+              <span class="tag">MLflow</span>
+              <span class="tag">Weights & Biases</span>
+            </div>
+          </div>
+        </div>
+        <div class="resources">
+          <div class="resource-chip">ML Specialization <span>Andrew Ng · Coursera</span></div>
+          <div class="resource-chip">Deep Learning Specialization <span>deeplearning.ai</span></div>
+          <div class="resource-chip">fast.ai <span>Free Course</span></div>
+          <div class="resource-chip">PyTorch Docs <span>Official</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 3 -->
+    <div class="phase p3">
+      <div class="phase-label">
+        <div class="phase-month" style="color:#ff4f8b">Months 5–6</div>
+        <div class="phase-title" style="color:#ff4f8b">LLMs & Generative AI</div>
+      </div>
+      <div class="phase-spine" style="color:#ff4f8b">
+        <div class="spine-node" style="border-color:#ff4f8b;box-shadow:0 0 16px #ff4f8b"></div>
+        <div class="spine-line" style="background:linear-gradient(to bottom, #ff4f8b, transparent)"></div>
+      </div>
+      <div class="phase-content">
+        <div class="phase-header">
+          <div class="phase-icon">🤖</div>
+          <div class="phase-name" style="color:#ff4f8b">LLMs & Generative AI Engineering</div>
+        </div>
+        <div class="skills-grid">
+          <div class="skill-card" style="--card-accent:#ff4f8b">
+            <div class="skill-card-title">LLM Fundamentals</div>
+            <div class="skill-tags">
+              <span class="tag">How LLMs work</span>
+              <span class="tag key">GPT-4 / Claude / Gemini APIs</span>
+              <span class="tag">Tokenization</span>
+              <span class="tag">Context Windows</span>
+              <span class="tag">Temperature / Top-p</span>
+              <span class="tag hot">Prompt Engineering</span>
+              <span class="tag">System Prompts</span>
+              <span class="tag">Few-shot Learning</span>
+            </div>
+          </div>
+          <div class="skill-card" style="--card-accent:#ff4f8b">
+            <div class="skill-card-title">LangChain & LlamaIndex</div>
+            <div class="skill-tags">
+              <span class="tag hot">LangChain</span>
+              <span class="tag hot">LlamaIndex</span>
+              <span class="tag key">RAG (Retrieval-Augmented Gen)</span>
+              <span class="tag">Chains & Pipelines</span>
+              <span class="tag">Memory Modules</span>
+              <span class="tag">Document Loaders</span>
+              <span class="tag">Output Parsers</span>
+            </div>
+          </div>
+          <div class="skill-card" style="--card-accent:#ff4f8b">
+            <div class="skill-card-title">Vector Databases</div>
+            <div class="skill-tags">
+              <span class="tag key">Pinecone</span>
+              <span class="tag">ChromaDB</span>
+              <span class="tag">Weaviate</span>
+              <span class="tag">Qdrant</span>
+              <span class="tag">Embeddings</span>
+              <span class="tag">Semantic Search</span>
+              <span class="tag">Similarity Metrics</span>
+            </div>
+          </div>
+          <div class="skill-card" style="--card-accent:#ff4f8b">
+            <div class="skill-card-title">AI Agents</div>
+            <div class="skill-tags">
+              <span class="tag hot">Agentic AI</span>
+              <span class="tag">Tool Use / Function Calling</span>
+              <span class="tag key">ReAct Pattern</span>
+              <span class="tag">LangGraph</span>
+              <span class="tag">AutoGen</span>
+              <span class="tag">CrewAI</span>
+              <span class="tag">Multi-agent Systems</span>
+            </div>
+          </div>
+        </div>
+        <div class="project-ideas">
+          <div class="project-header">🏗 Project Ideas</div>
+          <div class="project-list">
+            <div class="project-item">Custom chatbot with RAG over your own PDF documents</div>
+            <div class="project-item">AI agent that searches the web and summarizes answers</div>
+            <div class="project-item">Multi-turn conversational assistant with memory</div>
+          </div>
+        </div>
+        <div class="resources">
+          <div class="resource-chip">LangChain Docs <span>Official</span></div>
+          <div class="resource-chip">Anthropic Cookbook <span>GitHub</span></div>
+          <div class="resource-chip">LLM Bootcamp <span>Full Stack Deep Learning</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 4 -->
+    <div class="phase p4">
+      <div class="phase-label">
+        <div class="phase-month" style="color:#00e5a0">Months 7–8</div>
+        <div class="phase-title" style="color:#00e5a0">Production & MLOps</div>
+      </div>
+      <div class="phase-spine" style="color:#00e5a0">
+        <div class="spine-node" style="border-color:#00e5a0;box-shadow:0 0 16px #00e5a0"></div>
+        <div class="spine-line" style="background:linear-gradient(to bottom, #00e5a0, transparent)"></div>
+      </div>
+      <div class="phase-content">
+        <div class="phase-header">
+          <div class="phase-icon">🚀</div>
+          <div class="phase-name" style="color:#00e5a0">Production Engineering & MLOps</div>
+        </div>
+        <div class="skills-grid">
+          <div class="skill-card" style="--card-accent:#00e5a0">
+            <div class="skill-card-title">API & Backend</div>
+            <div class="skill-tags">
+              <span class="tag key">FastAPI</span>
+              <span class="tag">REST APIs</span>
+              <span class="tag">WebSockets (streaming)</span>
+              <span class="tag">Authentication (JWT)</span>
+              <span class="tag">Rate Limiting</span>
+              <span class="tag">Async Python</span>
+              <span class="tag">Pydantic</span>
+            </div>
+          </div>
+          <div class="skill-card" style="--card-accent:#00e5a0">
+            <div class="skill-card-title">Cloud & Deployment</div>
+            <div class="skill-tags">
+              <span class="tag key">AWS / GCP / Azure</span>
+              <span class="tag">AWS Lambda</span>
+              <span class="tag">EC2 / Cloud Run</span>
+              <span class="tag">S3 / GCS (storage)</span>
+              <span class="tag">Docker</span>
+              <span class="tag">Kubernetes basics</span>
+              <span class="tag">Nginx</span>
+            </div>
+          </div>
+          <div class="skill-card" style="--card-accent:#00e5a0">
+            <div class="skill-card-title">MLOps Tooling</div>
+            <div class="skill-tags">
+              <span class="tag">MLflow</span>
+              <span class="tag">Weights & Biases</span>
+              <span class="tag">DVC (data versioning)</span>
+              <span class="tag key">CI/CD for ML</span>
+              <span class="tag">GitHub Actions</span>
+              <span class="tag">Model Registry</span>
+              <span class="tag">A/B Testing</span>
+            </div>
+          </div>
+          <div class="skill-card" style="--card-accent:#00e5a0">
+            <div class="skill-card-title">Observability & Evaluation</div>
+            <div class="skill-tags">
+              <span class="tag">LangSmith</span>
+              <span class="tag">Langfuse</span>
+              <span class="tag">LLM Evals</span>
+              <span class="tag">Guardrails AI</span>
+              <span class="tag">Hallucination Detection</span>
+              <span class="tag">Prompt Versioning</span>
+              <span class="tag">Cost Monitoring</span>
+            </div>
+          </div>
+          <div class="skill-card" style="--card-accent:#00e5a0">
+            <div class="skill-card-title">Databases & Storage</div>
+            <div class="skill-tags">
+              <span class="tag">PostgreSQL</span>
+              <span class="tag">Redis (caching)</span>
+              <span class="tag">MongoDB</span>
+              <span class="tag">pgvector</span>
+              <span class="tag">SQL</span>
+              <span class="tag">Object Storage</span>
+              <span class="tag">Data Pipelines</span>
+            </div>
+          </div>
+          <div class="skill-card" style="--card-accent:#00e5a0">
+            <div class="skill-card-title">Fine-Tuning & Open Source Models</div>
+            <div class="skill-tags">
+              <span class="tag hot">LoRA / QLoRA</span>
+              <span class="tag">Hugging Face Transformers</span>
+              <span class="tag">PEFT</span>
+              <span class="tag key">Llama 3 / Mistral</span>
+              <span class="tag">Ollama (local inference)</span>
+              <span class="tag">vLLM</span>
+              <span class="tag">Quantization</span>
+            </div>
+          </div>
+        </div>
+        <div class="resources">
+          <div class="resource-chip">FastAPI Docs <span>Official</span></div>
+          <div class="resource-chip">AWS Cloud Practitioner <span>Certification</span></div>
+          <div class="resource-chip">Made With ML <span>goku.me</span></div>
+          <div class="resource-chip">HuggingFace Course <span>Free</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 5 -->
+    <div class="phase p5">
+      <div class="phase-label">
+        <div class="phase-month" style="color:#ffb347">Months 9–10</div>
+        <div class="phase-title" style="color:#ffb347">Portfolio Building</div>
+      </div>
+      <div class="phase-spine" style="color:#ffb347">
+        <div class="spine-node" style="border-color:#ffb347;box-shadow:0 0 16px #ffb347"></div>
+        <div class="spine-line" style="background:linear-gradient(to bottom, #ffb347, transparent)"></div>
+      </div>
+      <div class="phase-content">
+        <div class="phase-header">
+          <div class="phase-icon">🎯</div>
+          <div class="phase-name" style="color:#ffb347">Portfolio Projects That Get You Hired</div>
+        </div>
+        <div class="project-ideas">
+          <div class="project-header">🏗 Build These 4 Projects</div>
+          <div class="project-list">
+            <div class="project-item"><strong>RAG Knowledge Base App</strong> — Upload any PDF, ask questions about it. Full stack: FastAPI backend + LangChain + ChromaDB + simple UI. Deploy on cloud.</div>
+            <div class="project-item"><strong>AI Agent with Tools</strong> — An agent that can search the web, read URLs, write code, and answer complex multi-step questions using ReAct or LangGraph.</div>
+            <div class="project-item"><strong>Fine-tuned Domain Model</strong> — Take Llama 3 or Mistral, fine-tune on a domain-specific dataset using LoRA, compare against base model. Document the results clearly.</div>
+            <div class="project-item"><strong>AI SaaS Micro-Product</strong> — Build and deploy a small AI-powered tool that solves a real problem. A resume analyzer, code reviewer, or email drafter. Shows you can ship to production.</div>
+          </div>
+        </div>
+        <div class="skills-grid" style="margin-top:16px">
+          <div class="skill-card" style="--card-accent:#ffb347">
+            <div class="skill-card-title">What Makes a Great Portfolio</div>
+            <div class="skill-tags">
+              <span class="tag key">Clean GitHub READMEs</span>
+              <span class="tag">Live Demos (Hugging Face Spaces)</span>
+              <span class="tag">Architecture Diagrams</span>
+              <span class="tag">Performance benchmarks</span>
+              <span class="tag">LinkedIn write-ups</span>
+              <span class="tag">Blog posts / Dev.to</span>
+            </div>
+          </div>
+          <div class="skill-card" style="--card-accent:#ffb347">
+            <div class="skill-card-title">Optional Certifications</div>
+            <div class="skill-tags">
+              <span class="tag">AWS Cloud Practitioner</span>
+              <span class="tag">GCP Associate ML Engineer</span>
+              <span class="tag">DeepLearning.AI certs</span>
+              <span class="tag">Databricks GenAI cert</span>
+              <span class="tag">Hugging Face certifications</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 6 -->
+    <div class="phase p6">
+      <div class="phase-label">
+        <div class="phase-month" style="color:#c084fc">Months 11–12</div>
+        <div class="phase-title" style="color:#c084fc">Job Hunt</div>
+      </div>
+      <div class="phase-spine" style="color:#c084fc">
+        <div class="spine-node" style="border-color:#c084fc;box-shadow:0 0 16px #c084fc"></div>
+      </div>
+      <div class="phase-content">
+        <div class="phase-header">
+          <div class="phase-icon">💼</div>
+          <div class="phase-name" style="color:#c084fc">Job Search & Interview Prep</div>
+        </div>
+        <div class="skills-grid">
+          <div class="skill-card" style="--card-accent:#c084fc">
+            <div class="skill-card-title">Interview Topics</div>
+            <div class="skill-tags">
+              <span class="tag key">Python coding (LeetCode Medium)</span>
+              <span class="tag">LLM system design</span>
+              <span class="tag">RAG architecture</span>
+              <span class="tag">ML fundamentals Q&A</span>
+              <span class="tag">Prompt engineering scenarios</span>
+              <span class="tag">Past project deep-dives</span>
+              <span class="tag">SQL queries</span>
+            </div>
+          </div>
+          <div class="skill-card" style="--card-accent:#c084fc">
+            <div class="skill-card-title">Where to Apply</div>
+            <div class="skill-tags">
+              <span class="tag key">YC Jobs (ycombinator.com/jobs)</span>
+              <span class="tag key">Wellfound / AngelList</span>
+              <span class="tag">LinkedIn (startups)</span>
+              <span class="tag">Otta.com</span>
+              <span class="tag">Greenhouse job boards</span>
+              <span class="tag">Company career pages</span>
+              <span class="tag">Referrals (most effective)</span>
+            </div>
+          </div>
+          <div class="skill-card" style="--card-accent:#c084fc">
+            <div class="skill-card-title">Networking</div>
+            <div class="skill-tags">
+              <span class="tag">LangChain Discord</span>
+              <span class="tag">Hugging Face Discord</span>
+              <span class="tag">Local AI meetups</span>
+              <span class="tag">Twitter / X AI community</span>
+              <span class="tag">LinkedIn content creation</span>
+              <span class="tag">Open source contributions</span>
+            </div>
+          </div>
+          <div class="skill-card" style="--card-accent:#c084fc">
+            <div class="skill-card-title">Target Company Types</div>
+            <div class="skill-tags">
+              <span class="tag hot">AI-first startups (best for juniors)</span>
+              <span class="tag">Series A–C companies</span>
+              <span class="tag">SaaS companies adding AI</span>
+              <span class="tag">Consulting firms</span>
+              <span class="tag">Big Tech (harder, higher bar)</span>
+              <span class="tag">Freelance / contract</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end phases -->
+
+  <!-- CAREER OUTCOMES -->
+  <div class="outcomes">
+    <div class="section-title">Career Paths After Year 1</div>
+    <div class="outcome-grid">
+      <div class="outcome-card">
+        <div class="outcome-emoji">🧑‍💻</div>
+        <div class="outcome-role">Junior AI Engineer</div>
+        <div class="outcome-salary">₹8–18 LPA · $70–100K</div>
+      </div>
+      <div class="outcome-card">
+        <div class="outcome-emoji">🏗</div>
+        <div class="outcome-role">AI Application Developer</div>
+        <div class="outcome-salary">₹10–20 LPA · $80–110K</div>
+      </div>
+      <div class="outcome-card">
+        <div class="outcome-emoji">🤖</div>
+        <div class="outcome-role">LLM / Prompt Engineer</div>
+        <div class="outcome-salary">₹12–22 LPA · $90–120K</div>
+      </div>
+      <div class="outcome-card">
+        <div class="outcome-emoji">🔧</div>
+        <div class="outcome-role">MLOps Engineer</div>
+        <div class="outcome-salary">₹12–24 LPA · $90–130K</div>
+      </div>
+      <div class="outcome-card">
+        <div class="outcome-emoji">🚀</div>
+        <div class="outcome-role">AI Product Engineer</div>
+        <div class="outcome-salary">₹15–30 LPA · $100–150K</div>
+      </div>
+    </div>
+
+    <!-- SALARY PROGRESSION -->
+    <div class="salary-track" style="margin-top:32px">
+      <div class="section-title" style="margin-bottom:16px">Salary Progression Over Time</div>
+      <div class="salary-bars">
+        <div class="salary-row">
+          <div class="salary-label">Year 1</div>
+          <div class="salary-bar-track"><div class="salary-bar-fill" style="width:20%;background:linear-gradient(to right,#00f0ff,#7b5fff)"></div></div>
+          <div class="salary-amount">₹8–18 LPA</div>
+        </div>
+        <div class="salary-row">
+          <div class="salary-label">Year 2–3</div>
+          <div class="salary-bar-track"><div class="salary-bar-fill" style="width:40%;background:linear-gradient(to right,#7b5fff,#ff4f8b)"></div></div>
+          <div class="salary-amount">₹18–35 LPA</div>
+        </div>
+        <div class="salary-row">
+          <div class="salary-label">Year 4–5</div>
+          <div class="salary-bar-track"><div class="salary-bar-fill" style="width:62%;background:linear-gradient(to right,#ff4f8b,#00e5a0)"></div></div>
+          <div class="salary-amount">₹35–60 LPA</div>
+        </div>
+        <div class="salary-row">
+          <div class="salary-label">Year 7–10</div>
+          <div class="salary-bar-track"><div class="salary-bar-fill" style="width:90%;background:linear-gradient(to right,#00e5a0,#ffb347)"></div></div>
+          <div class="salary-amount">₹60–1.5 Cr+</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- KEY TAGS LEGEND -->
+  <div style="margin-top:40px;padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:12px;display:flex;gap:24px;flex-wrap:wrap;align-items:center">
+    <div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase">Tag Guide</div>
+    <div style="display:flex;align-items:center;gap:8px"><span class="tag key" style="display:inline-block">skill</span><span style="font-size:12px;color:var(--muted)">Must-know / Core skill</span></div>
+    <div style="display:flex;align-items:center;gap:8px"><span class="tag hot" style="display:inline-block">skill</span><span style="font-size:12px;color:var(--muted)">🔥 Currently hot in market</span></div>
+    <div style="display:flex;align-items:center;gap:8px"><span class="tag" style="display:inline-block">skill</span><span style="font-size:12px;color:var(--muted)">Good to know / Supporting skill</span></div>
+  </div>
+
+</div><!-- end page -->
+
+</body>
+</html>
